@@ -1,6 +1,7 @@
 import {
   ClusterOutlined,
   PieChartOutlined,
+  SafetyCertificateOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import React from "react";
@@ -57,6 +58,14 @@ const SideBarMenu: ISideBarMenu[] = [
     path_name: "/admin/users",
     title_name: "Users",
     icon_name: <UserOutlined />,
+    sub_menu: false,
+    children: [],
+    role: "",
+  },
+  {
+    path_name: "/admin/role-permission",
+    title_name: "Role & Permission",
+    icon_name: <SafetyCertificateOutlined />,
     sub_menu: false,
     children: [],
     role: "",

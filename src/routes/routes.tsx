@@ -1,6 +1,8 @@
 // import { lazy } from "react";
 
 import DashboardContainer from "@/containers/dashboard";
+import RoleAndPermissionManagementContainer from "@/containers/role-permission";
+import RoleAndPermissionUpdateContainer from "@/containers/role-permission/update";
 import MerchantSettingContainer from "@/containers/settings/merchant";
 import POSMachineSettingContainer from "@/containers/settings/pos_machine";
 import TerminalSettingContainer from "@/containers/settings/terminal";
@@ -52,6 +54,21 @@ const routes: IRoutesList[] = [
     route_type: "public_route",
     path: "/admin/users",
     component: <UserManagementContainer />,
+  },
+  {
+    route_type: "public_route",
+    path: "/admin/role-permission",
+    component: <RoleAndPermissionManagementContainer />,
+  },
+  {
+    route_type: "public_route",
+    path: "/admin/role-permission/create",
+    component: <RoleAndPermissionUpdateContainer />,
+  },
+  {
+    route_type: "public_route",
+    path: "/admin/role-permission/:id/update",
+    component: <RoleAndPermissionUpdateContainer />,
   },
 ];
 

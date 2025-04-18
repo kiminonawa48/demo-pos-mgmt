@@ -38,6 +38,14 @@ const UserForm = ({
         </Form.Item>
 
         <Form.Item
+          name="name"
+          label="Name"
+          rules={[{ required: true, message: "Please enter a name" }]}
+        >
+          <Input placeholder="Enter name" />
+        </Form.Item>
+
+        <Form.Item
           name="username"
           label="Username"
           rules={[
@@ -49,11 +57,14 @@ const UserForm = ({
         </Form.Item>
 
         <Form.Item
-          name="name"
-          label="Name"
-          rules={[{ required: true, message: "Please enter a name" }]}
+          name="password"
+          label="Password"
+          rules={[
+            { required: true, message: "Please enter a password" },
+            { min: 8, message: "password must be at least 4 characters" },
+          ]}
         >
-          <Input placeholder="Enter name" />
+          <Input.Password placeholder="Enter password" />
         </Form.Item>
 
         <Form.Item name="status" label="Status" valuePropName="checked">
