@@ -6,7 +6,12 @@ import {
 import { Button, Col, Dropdown, Layout, Row, Space, theme } from "antd";
 import React from "react";
 
-import { PoweroffOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  PoweroffOutlined,
+  UserOutlined,
+  FolderOpenOutlined,
+} from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 // import { useHistory } from 'react-router-dom'
 
 // import { useHistory } from 'react-router';
@@ -29,6 +34,8 @@ const HeaderNav = ({
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const navigate = useNavigate();
 
   const handleToggle = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -77,6 +84,18 @@ const HeaderNav = ({
               }}
             />
           </Space>
+          {/*  */}
+          <Space align="center" style={{ marginRight: 10 }}>
+            <Button
+              shape="circle"
+              icon={<FolderOpenOutlined />}
+              size="middle"
+              onClick={() => {
+                navigate("/");
+              }}
+            />
+          </Space>
+          {/*  */}
           <Space align="center">
             <Dropdown
               arrow={true}

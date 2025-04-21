@@ -3,6 +3,7 @@ import { ProvideAuth } from "@/routes/auth/ProvideAuth";
 import PrivateRoute from "./auth/PrivateRoute";
 import RoutesList, { IRoutesList } from "./routes";
 import RouteWrapper from "./RouteWrapper";
+import HomepageContainer from "@/containers/home";
 
 const RoutesComponent = () => {
   return (
@@ -10,10 +11,9 @@ const RoutesComponent = () => {
       <Router>
         <Routes>
           {RoutesList.map((r: IRoutesList) => {
-            // Wrap component with RouteWrapper
             const wrappedComponent = (
               <RouteWrapper
-                useLayout={r.useLayout !== false} // Default to true if not specified
+                useLayout={r.useLayout !== false}
                 title={r.title || "Page"}
                 breadcumb={r.breadcumb || ""}
               >
@@ -37,6 +37,9 @@ const RoutesComponent = () => {
               );
             }
           })}
+
+          {/* without layout */}
+          <Route path={"/"} element={<HomepageContainer />} />
         </Routes>
       </Router>
     </ProvideAuth>

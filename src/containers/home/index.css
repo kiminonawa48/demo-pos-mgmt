@@ -1,0 +1,111 @@
+/* Main container styles */
+.folder-selection-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px;
+    background-color: #f0f2f5;
+  }
+  
+  .folder-selection-card {
+    width: 100%;
+    max-width: 900px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+  
+  .card-title {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  
+  /* Folder options styling */
+  .folder-card {
+    height: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    padding: 16px;
+  }
+  
+  .folder-card.selected {
+    background-color: #e6f7ff;
+    border-color: #1890ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+  
+  .folder-card:hover {
+    border-color: #40a9ff;
+    transform: translateY(-2px);
+  }
+  
+  /* Image container styling */
+  .folder-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 140px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  
+  .folder-image {
+    max-width: 100%;
+    max-height: 140px;
+    object-fit: contain;
+  }
+  
+  .folder-title {
+    font-size: 16px;
+    text-align: center;
+    margin-top: 8px;
+  }
+  
+  /* Button area styling */
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+    width: 100%;
+  }
+  
+  .center-buttons {
+    display: flex;
+    gap: 16px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .folder-card {
+      height: 220px;
+      margin-bottom: 16px;
+    }
+    
+    .folder-image-container {
+      height: 120px;
+    }
+    
+    .folder-image {
+      max-height: 120px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .center-buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    .center-buttons .ant-btn {
+      width: 100%;
+    }
+  }

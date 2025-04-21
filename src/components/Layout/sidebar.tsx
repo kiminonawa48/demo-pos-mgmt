@@ -1,8 +1,8 @@
 import { Divider, Layout, Menu, Space, Typography } from "antd";
 
 import { useLocation, useNavigate } from "react-router";
-
-import SideBarMenu, { ISideBarMenu } from "./SidebarMenu/index";
+import SideBarMenuPosMgmt from "./SidebarMenu/PosMgmt";
+import { ISideBarMenu } from "./SidebarMenu/domain";
 
 const { Sider } = Layout;
 
@@ -78,7 +78,7 @@ const Sidebar = ({
         selectedKeys={[location.pathname]}
         defaultSelectedKeys={[location.pathname]}
         defaultOpenKeys={[key_open_sidebar]}
-        items={(SideBarMenu || []).map((sb: ISideBarMenu) => {
+        items={(SideBarMenuPosMgmt || []).map((sb: ISideBarMenu) => {
           // if (sb.role.join(',') === user_role.join(',') || sb.role.join(',') === "") {
           if (user_role.find((str) => str === sb.role) || sb.role === "") {
             if (sb.sub_menu === true) {
