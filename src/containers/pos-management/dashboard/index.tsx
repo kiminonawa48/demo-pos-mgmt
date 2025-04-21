@@ -6,11 +6,8 @@ import InfoSummary from "./components/InfoSummary";
 import TransactionChart from "./components/TransactionChart";
 import RankingTransaction from "./components/RankingTransaction";
 import { api } from "@/utils/fetchHelper";
-import { useTranslation } from "react-i18next";
 
 const DashboardContainer = () => {
-  const { t } = useTranslation("common");
-  
   const [locations, setLocations] = useState<ILocationMarker[]>([]);
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
