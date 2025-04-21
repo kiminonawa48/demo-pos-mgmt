@@ -65,11 +65,11 @@ const RoleAndPermissionList = () => {
           <ButtonAction
             enableView
             onViewClick={() => {
-              navigate("/admin/role-permission/1/update?mode=VIEW");
+              navigate("/admin/pos-mgmt/role-permission/1/update?mode=VIEW");
             }}
             enableEdit
             onEditClick={() => {
-              navigate("/admin/role-permission/1/update?mode=Update");
+              navigate("/admin/pos-mgmt/role-permission/1/update?mode=Update");
             }}
             enableDelete
             onDeleteClick={() => {
