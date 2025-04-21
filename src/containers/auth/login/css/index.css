@@ -1,0 +1,218 @@
+/* Main container styles */
+.login-container {
+    min-height: 100vh;
+    width: 100%;
+    background-color: #f8f8f8;
+    overflow: hidden;
+  }
+  
+  .login-row {
+    min-height: 100vh;
+  }
+  
+  /* Left side with character and stats */
+  .left-side {
+    background-color: #f8f8f8;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .stats-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .character-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .character-image {
+    max-height: 500px;
+  }
+  
+  /* Stats cards */
+  .stats-card {
+    position: absolute;
+    width: 200px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    background: white;
+    z-index: 3;
+  }
+  
+  .profit-card {
+    top: 20%;
+    left: 15%;
+  }
+  
+  .order-card {
+    bottom: 25%;
+    right: 15%;
+  }
+  
+  .card-label {
+    display: block;
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .card-sublabel {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 10px;
+  }
+  
+  .chart-container {
+    margin: 10px 0;
+  }
+  
+  .chart {
+    width: 100%;
+    height: 60px;
+  }
+  
+  .chart-line {
+    fill: none;
+    stroke: #3dd8f3;
+    stroke-width: 2;
+  }
+  
+  .chart-point {
+    fill: #3dd8f3;
+  }
+  
+  .bar-chart {
+    fill: #ebebfb;
+    rx: 2;
+  }
+  
+  .bar-chart-highlight {
+    fill: #7367f0;
+    rx: 2;
+  }
+  
+  .stats-value {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .value {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  
+  .change {
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .positive {
+    color: #28c76f;
+  }
+  
+  /* Right side with login form */
+  .right-side {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+  
+  .login-form-container {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+  }
+  
+  .login-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  
+  .subtitle {
+    display: block;
+    color: #626262;
+    margin-top: 8px;
+  }
+  
+  .demo-credentials {
+    background-color: #f0f0ff;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  
+  .demo-text {
+    color: #7367f0;
+    font-size: 14px;
+  }
+  
+  .login-form {
+    width: 100%;
+  }
+  
+  .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .forgot-link {
+    color: #7367f0;
+  }
+  
+  .login-button {
+    background-color: #7367f0;
+    height: 40px;
+    font-weight: 500;
+    font-size: 16px;
+    border: none;
+  }
+  
+  .login-button:hover {
+    background-color: #5e50ee;
+  }
+  
+  .register-now {
+    text-align: center;
+    margin-top: 24px;
+  }
+  
+  .register-link {
+    color: #7367f0;
+    font-weight: 500;
+    margin-left: 5px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .right-side {
+      padding: 20px;
+    }
+    
+    .login-form-container {
+      padding: 0;
+    }
+    
+    .login-header h2 {
+      font-size: 24px;
+    }
+  }

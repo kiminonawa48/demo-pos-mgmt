@@ -13,12 +13,6 @@ import { ArrowRightOutlined } from "@ant-design/icons";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 
-// Import your images here
-// Example:
-// import posImage from "./assets/pos-management.png";
-// import ldbImage from "./assets/ldb.png";
-// import ldbPaymentImage from "./assets/ldb-payment.png";
-
 const { Title } = Typography;
 
 const FolderOption = ({ type, title, imageSrc, isSelected, onSelect }) => {
@@ -49,7 +43,6 @@ const HomepageContainer = () => {
   const navigate = useNavigate();
   const [selectedApp, setSelectedApp] = useState("/");
 
-  // Add image paths to each folder option
   const folderOptions = [
     {
       path: "/admin/pos-mgmt/dashboard",
@@ -63,7 +56,7 @@ const HomepageContainer = () => {
     },
     {
       path: "/ldb-payment",
-      title: "LDB Payment",
+      title: "LDB Monitoring",
       image: "/assets/images/ldb_logo.png",
     },
   ];

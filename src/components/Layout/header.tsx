@@ -104,8 +104,8 @@ const HeaderNav = ({
                 items: [
                   {
                     label: (
-                      <a href="/logout" rel="noopener noreferrer">
-                        ອອກຈາກລະບົບ
+                      <a href="/login" rel="noopener noreferrer">
+                        Logout
                       </a>
                     ),
                     key: "5",

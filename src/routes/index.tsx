@@ -4,6 +4,7 @@ import PrivateRoute from "./auth/PrivateRoute";
 import RoutesList, { IRoutesList } from "./routes";
 import RouteWrapper from "./RouteWrapper";
 import HomepageContainer from "@/containers/home";
+import LoginConatiner from "@/containers/auth/login";
 
 const RoutesComponent = () => {
   return (
@@ -40,6 +41,7 @@ const RoutesComponent = () => {
 
           {/* without layout */}
           <Route path={"/"} element={<HomepageContainer />} />
+          <Route path={"/login"} element={<LoginConatiner />} />
         </Routes>
       </Router>
     </ProvideAuth>
