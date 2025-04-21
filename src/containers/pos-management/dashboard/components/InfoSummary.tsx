@@ -7,6 +7,7 @@ import {
   ShopOutlined,
   ShakeOutlined,
 } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const iconMap = {
   merchant: <ShopOutlined style={{ fontSize: "24px", color: "#1677ff" }} />,
@@ -27,9 +28,11 @@ const bgColorMap = {
 };
 
 const InfoSummary = ({ data }: { data: ISummaryInfo[] }) => {
+  const { t: tDashboard } = useTranslation("dashboard");
+
   return (
     <Card
-      title="Statistics"
+      title={tDashboard("statistics")}
       variant="borderless"
       extra={<span style={{ color: "#8c8c8c" }}>Updated 1 day ago</span>}
     >

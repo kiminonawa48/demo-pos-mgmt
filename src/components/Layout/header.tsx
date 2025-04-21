@@ -2,9 +2,11 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   SyncOutlined,
+  TranslationOutlined,
 } from "@ant-design/icons";
 import { Button, Col, Dropdown, Layout, Row, Space, theme } from "antd";
 import React from "react";
+import type { MenuProps } from "antd";
 
 import {
   PoweroffOutlined,
@@ -12,6 +14,7 @@ import {
   FolderOpenOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 // import { useHistory } from 'react-router-dom'
 
 // import { useHistory } from 'react-router';
@@ -36,6 +39,27 @@ const HeaderNav = ({
   } = theme.useToken();
 
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+
+  // Function to change language and return the label text
+  const getChangeLanguageItem = (lang: string, label: string) => {
+    return {
+      key: lang,
+      label: label,
+      onClick: () => {
+        i18n.changeLanguage(lang);
+      },
+    };
+  };
+
+  // Define dropdown menu items
+  const items: MenuProps["items"] = [
+    getChangeLanguageItem("eng", "English"),
+    getChangeLanguageItem("lao", "ລາວ"), // Lao language
+  ];
+
+  // Current language code
+  const currentLang = i18n.language;
 
   const handleToggle = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -69,6 +93,28 @@ const HeaderNav = ({
           </Col>
 
           <Col flex="auto"></Col>
+
+          {/*  */}
+          <Space align="center" style={{ marginRight: 10 }}>
+            <Dropdown arrow={true} trigger={["click"]} menu={{ items }}>
+              <a
+                className="ant-dropdown-link"
+                href="#"
+                onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
+                  e.preventDefault()
+                }
+              >
+                <Button
+                  shape="circle"
+                  icon={<TranslationOutlined />}
+                  size="middle"
+                  title={`Current language: ${
+                    currentLang === "eng" ? "English" : "ລາວ"
+                  }`}
+                />
+              </a>
+            </Dropdown>
+          </Space>
 
           <Space align="center" style={{ marginRight: 10 }}>
             <Button
