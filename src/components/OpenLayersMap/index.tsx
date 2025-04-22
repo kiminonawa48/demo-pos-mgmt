@@ -33,7 +33,6 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
   initialZoom = 12,
   centerOn = 0,
 }) => {
-  console.log("OpenLayersMap", locations);
   const mapRef = useRef<HTMLDivElement>(null);
   const mapElement = useRef<HTMLDivElement | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
@@ -48,7 +47,6 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
     locs: LocationMarker[],
     centerIdx: number
   ) => {
-    console.log("updateMapMarkers", locs);
     const vectorLayer = mapInstance
       .getLayers()
       .getArray()[2] as VectorLayer<VectorSource>;
@@ -236,7 +234,6 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
     if (!map) return;
 
     try {
-    console.log("useEffect updateMapMarkers");
       updateMapMarkers(map, locations, centerOn);
     } catch (error) {
       const errorMessage =
@@ -253,8 +250,6 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
       map.updateSize();
     };
 
-    console.log("handleResize");
-
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -264,9 +259,6 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
 
   return (
     <div className="flex flex-col items-center w-full">
-      <div className="bg-blue-50 p-2 w-full text-xs mb-2">
-        Status: {debugInfo}
-      </div>
 
       <div className="relative w-full">
         {mapError && (
