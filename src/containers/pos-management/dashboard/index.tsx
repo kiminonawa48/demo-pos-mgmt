@@ -10,6 +10,7 @@ import { api } from "@/utils/fetchHelper";
 const DashboardContainer = () => {
   const [locations, setLocations] = useState<ILocationMarker[]>([]);
   const [data, setData] = useState<any>(null);
+  console.log('data', data);
   const [loading, setLoading] = useState(false);
   const fetchData = async () => {
     try {
