@@ -35,167 +35,188 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
   const mapRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<Map | null>(null);
-  const [selectedLocation, setSelectedLocation] =
-    useState<LocationMarker | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<LocationMarker | null>(null);
+  const [mapError, setMapError] = useState<string | null>(null);
 
-  // Initialize map on component mount
+  // Create a base map regardless of locations
   useEffect(() => {
-    if (!mapRef.current || !popupRef.current || locations.length === 0) return;
-
-    // Create markers for all locations
-    const features = locations.map((location, index) => {
-      const feature = new Feature({
-        geometry: new Point(fromLonLat([location.long, location.lat])),
-        locationData: location,
-        id: index,
+    if (!mapRef.current) return;
+    
+    try {
+      console.log("Initializing map...");
+      
+      // Create a basic map even without locations
+      const initialMap = new Map({
+        target: mapRef.current,
+        layers: [new TileLayer({ source: new OSM() })],
+        view: new View({
+          center: fromLonLat([0, 0]), // Default center
+          zoom: initialZoom,
+        }),
       });
 
-      feature.setStyle(
-        new Style({
-          image: new Icon({
-            src: "/assets/images/ldb_logo.png",
-            scale: 0.07,
-            anchor: [0.5, 1],
-          }),
-          // image: new Circle({
-          //   radius: 8,
-          //   fill: new Fill({ color: "#1980C7" }),
-          //   stroke: new Stroke({ color: "white", width: 2 }),
-          //   scale: 1.5,
-          // }),
-          // text: new Text({
-          //   text: (index + 1).toString(),
-          //   fill: new Fill({ color: "#fff" }),
-          //   font: "bold 12px Arial",
-          //   offsetY: 1,
-          // }),
-        })
-      );
+      // Create vector source and layer for markers
+      const vectorSource = new VectorSource();
+      const vectorLayer = new VectorLayer({
+        source: vectorSource,
+      });
+      initialMap.addLayer(vectorLayer);
+      
+      // Add popup overlay if it exists
+      if (popupRef.current) {
+        const popup = new Overlay({
+          element: popupRef.current,
+          positioning: "bottom-center",
+          stopEvent: false,
+          offset: [0, -10],
+        });
+        initialMap.addOverlay(popup);
+      }
+      
+      // Add click handler for features
+      initialMap.on("click", (evt) => {
+        const feature = initialMap.forEachFeatureAtPixel(
+          evt.pixel,
+          (feature) => feature
+        );
 
-      return feature;
-    });
-
-    const vectorSource = new VectorSource({
-      features,
-    });
-
-    const vectorLayer = new VectorLayer({
-      source: vectorSource,
-    });
-
-    // Create popup overlay
-    const popup = new Overlay({
-      element: popupRef.current,
-      positioning: "bottom-center",
-      stopEvent: false,
-      offset: [0, -10],
-    });
-
-    // Create map
-    const initialCenter = locations[centerOn] || locations[0];
-    const initialMap = new Map({
-      target: mapRef.current,
-      layers: [new TileLayer({ source: new OSM() }), vectorLayer],
-      overlays: [popup],
-      view: new View({
-        center: fromLonLat([initialCenter.long, initialCenter.lat]),
-        zoom: initialZoom,
-      }),
-    });
-
-    // Add click handler for features
-    initialMap.on("click", (evt) => {
-      const feature = initialMap.forEachFeatureAtPixel(
-        evt.pixel,
-        (feature) => feature
-      );
-
-      if (feature) {
-        const locationData = feature.get("locationData") as LocationMarker;
-        if (locationData) {
-          const coordinates = (feature.getGeometry() as Point).getCoordinates();
-          popup.setPosition(coordinates);
-          setSelectedLocation(locationData);
+        if (feature) {
+          const locationData = feature.get("locationData") as LocationMarker;
+          if (locationData) {
+            const coordinates = (feature.getGeometry() as Point).getCoordinates();
+            const popup = initialMap.getOverlays().getArray()[0];
+            popup.setPosition(coordinates);
+            setSelectedLocation(locationData);
+          }
+        } else {
+          const popup = initialMap.getOverlays().getArray()[0];
+          popup.setPosition(undefined);
+          setSelectedLocation(null);
         }
-      } else {
-        popup.setPosition(undefined);
-        setSelectedLocation(null);
-      }
-    });
+      });
 
-    // Change cursor on hover
-    initialMap.on("pointermove", (e) => {
-      const hit = initialMap.hasFeatureAtPixel(e.pixel);
-      initialMap.getViewport().style.cursor = hit ? "pointer" : "";
-    });
+      // Change cursor on hover
+      initialMap.on("pointermove", (e) => {
+        const hit = initialMap.hasFeatureAtPixel(e.pixel);
+        initialMap.getViewport().style.cursor = hit ? "pointer" : "";
+      });
 
-    setMap(initialMap);
-
-    // Clean up on unmount
-    return () => {
-      if (initialMap) {
+      setMap(initialMap);
+      console.log("Map initialized successfully");
+      
+      // Clean up on unmount
+      return () => {
+        console.log("Cleaning up map");
         initialMap.setTarget("");
-      }
-    };
-  }, [locations]);
+      };
+    } catch (error) {
+      console.error("Error initializing map:", error);
+      setMapError(`Map initialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }, [initialZoom]); // Only depends on initialZoom, not locations
 
-  // Update markers when locations change
+  // Update markers when locations or map changes
   useEffect(() => {
     if (!map) return;
+    
+    try {
+      console.log("Updating map with locations:", locations);
+      
+      // Get vector layer
+      const vectorLayer = map.getLayers().getArray()[1] as VectorLayer<VectorSource>;
+      const vectorSource = vectorLayer.getSource() as VectorSource;
 
-    const vectorLayer = map
-      .getLayers()
-      .getArray()[1] as VectorLayer<VectorSource>;
-    const vectorSource = vectorLayer.getSource() as VectorSource;
+      // Clear existing features
+      vectorSource.clear();
 
-    // Clear existing features
-    vectorSource.clear();
+      // Skip if no locations
+      if (locations.length === 0) {
+        console.log("No locations to display");
+        return;
+      }
 
-    // Add new features
-    const features = locations.map((location, index) => {
-      const feature = new Feature({
-        geometry: new Point(fromLonLat([location.long, location.lat])),
-        locationData: location,
-        id: index,
+      // Use a relative path based on base URL
+      const iconPath = new URL('/assets/images/ldb_logo.png', window.location.origin).href;
+      console.log("Using icon path:", iconPath);
+      
+      // Add new features
+      const features = locations.map((location, index) => {
+        const feature = new Feature({
+          geometry: new Point(fromLonLat([location.long, location.lat])),
+          locationData: location,
+          id: index,
+        });
+
+        feature.setStyle(
+          new Style({
+            image: new Icon({
+              src: iconPath,
+              scale: 0.07,
+              anchor: [0.5, 1],
+              // Add crossOrigin if needed
+              crossOrigin: 'anonymous'
+            }),
+          })
+        );
+
+        return feature;
       });
 
-      feature.setStyle(
-        new Style({
-          image: new Icon({
-            src: "/assets/images/ldb_logo.png",
-            scale: 0.07,
-            anchor: [0.5, 1],
-          }),
-        })
-      );
+      vectorSource.addFeatures(features);
 
-      return feature;
-    });
-
-    vectorSource.addFeatures(features);
-
-    // Center the map if we have at least one location
-    if (locations.length > 0) {
-      const center = locations[0];
+      // Center the map on the first location (or specified centerOn index)
+      const center = locations[centerOn] || locations[0];
       map.getView().animate({
         center: fromLonLat([center.long, center.lat]),
         duration: 1000,
       });
+      
+      console.log("Map updated with markers");
+    } catch (error) {
+      console.error("Error updating map markers:", error);
+      setMapError(`Failed to update map markers: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
-  }, [map, locations]);
+  }, [map, locations, centerOn]);
+
+  // Force map resize when container might change size
+  useEffect(() => {
+    if (!map) return;
+    
+    const resizeObserver = new ResizeObserver(() => {
+      map.updateSize();
+    });
+    
+    if (mapRef.current) {
+      resizeObserver.observe(mapRef.current);
+    }
+    
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [map]);
 
   return (
     <div className="flex flex-col items-center w-full">
       <div className="relative w-full">
+        {mapError && (
+          <div className="absolute inset-0 flex items-center justify-center bg-red-50 z-10 p-4 text-red-600">
+            {mapError}
+          </div>
+        )}
+        {!map && !mapError && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10">
+            Loading map...
+          </div>
+        )}
         <div
           ref={mapRef}
           className="w-full border border-gray-300 rounded-lg shadow-md"
           style={{
             width: "100%",
             height: "400px",
-            position: "relative", // Ensure proper stacking context
-            overflow: "hidden", // Prevent any overflow issues
-            display: "block", // Force block display
+            position: "relative",
+            overflow: "hidden",
+            display: "block",
           }}
         />
 
