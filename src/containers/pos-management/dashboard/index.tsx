@@ -12,6 +12,7 @@ const DashboardContainer = () => {
   const [data, setData] = useState<any>(null);
   console.log('data', data);
   const [loading, setLoading] = useState(false);
+
   const fetchData = async () => {
     try {
       const response = await api.get("/todos", false, {}, setLoading);
@@ -23,32 +24,34 @@ const DashboardContainer = () => {
 
   useEffect(() => {
     fetchData();
+
+    // Set the locations data when the component mounts
+    setLocations([
+      {
+        lat: 17.967461,
+        long: 102.5994161,
+        merchant_name: "Coffee Shop Downtown",
+        machine_name: "ATM-001",
+      },
+      {
+        lat: 17.96281,
+        long: 102.601998,
+        merchant_name: "Central Mall",
+        machine_name: "ATM-002",
+      },
+      {
+        lat: 17.970123,
+        long: 102.605678,
+        merchant_name: "University Campus",
+        machine_name: "ATM-003",
+      },
+    ]);
   }, []);
 
+  // For debugging
   useEffect(() => {
-    return () => {
-      setLocations([
-        {
-          lat: 17.967461,
-          long: 102.5994161,
-          merchant_name: "Coffee Shop Downtown",
-          machine_name: "ATM-001",
-        },
-        {
-          lat: 17.96281,
-          long: 102.601998,
-          merchant_name: "Central Mall",
-          machine_name: "ATM-002",
-        },
-        {
-          lat: 17.970123,
-          long: 102.605678,
-          merchant_name: "University Campus",
-          machine_name: "ATM-003",
-        },
-      ]);
-    };
-  }, []);
+    console.log("Locations updated:", locations);
+  }, [locations]);
 
   const statisticsData = [
     { type: "merchant", label: "Merchant", value: 230 },
@@ -70,7 +73,7 @@ const DashboardContainer = () => {
           </Col>
 
           <Col className="gutter-row" span={24} lg={24} md={24} sm={24} xs={24}>
-            <MapSummary locations={locations} />
+            {locations.length > 0 && <MapSummary locations={locations} />}
           </Col>
 
           <Col className="gutter-row" span={16} lg={16} md={16} sm={24} xs={24}>
