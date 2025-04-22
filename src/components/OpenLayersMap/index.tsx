@@ -41,6 +41,7 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
     useState<LocationMarker | null>(null);
   const [mapError, setMapError] = useState<string | null>(null);
   const [debugInfo, setDebugInfo] = useState<string>("");
+  console.log('debugInfo', debugInfo);
 
   const updateMapMarkers = (
     mapInstance: Map,
