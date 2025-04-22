@@ -193,6 +193,9 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
           style={{
             width: "100%",
             height: "400px",
+            position: "relative", // Ensure proper stacking context
+            overflow: "hidden", // Prevent any overflow issues
+            display: "block", // Force block display
           }}
         />
 

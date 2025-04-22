@@ -14,6 +14,15 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: { '@': path.resolve(__dirname, 'src') },
+      'ol': 'ol',
+    },
+    optimizeDeps: {
+      include: ['ol']
+    },
+    build: {
+      commonjsOptions: {
+        include: [/ol/, /node_modules/],
+      },
     },
     base: '/',
   }

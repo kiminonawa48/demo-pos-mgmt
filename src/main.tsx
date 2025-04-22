@@ -4,6 +4,7 @@ import { ConfigProvider } from "antd";
 import RoutesComponent from "./routes/index.tsx";
 import "./App.css";
 import './i18n/i18n';
+import 'ol/ol.css';
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
