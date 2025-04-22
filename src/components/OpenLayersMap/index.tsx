@@ -42,6 +42,72 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
   const [mapError, setMapError] = useState<string | null>(null);
   const [debugInfo, setDebugInfo] = useState<string>("");
 
+  const updateMapMarkers = (
+    mapInstance: Map,
+    locs: LocationMarker[],
+    centerIdx: number
+  ) => {
+    const vectorLayer = mapInstance
+      .getLayers()
+      .getArray()[2] as VectorLayer<VectorSource>;
+    const vectorSource = vectorLayer.getSource() as VectorSource;
+
+    vectorSource.clear();
+
+    if (locs.length === 0) {
+      setDebugInfo("No locations to display on map");
+      return;
+    }
+
+    setDebugInfo(`Updating ${locs.length} locations on map`);
+
+    const features = locs.map((location, index) => {
+      const feature = new Feature({
+        geometry: new Point(fromLonLat([location.long, location.lat])),
+        locationData: location,
+        id: index,
+      });
+
+      try {
+        feature.setStyle(
+          new Style({
+            image: new Icon({
+              src: "/assets/images/ldb_logo.png",
+              scale: 0.07,
+              anchor: [0.5, 1],
+              crossOrigin: "anonymous",
+            }),
+          })
+        );
+      } catch (e) {
+        console.log("e", e);
+        feature.setStyle(
+          new Style({
+            image: new Circle({
+              radius: 8,
+              fill: new Fill({ color: "#1980C7" }),
+              stroke: new Stroke({ color: "white", width: 2 }),
+            }),
+          })
+        );
+      }
+
+      return feature;
+    });
+
+    vectorSource.addFeatures(features);
+
+    if (locs.length > 0) {
+      const center = locs[centerIdx] || locs[0];
+
+      mapInstance.getView().animate({
+        center: fromLonLat([center.long, center.lat]),
+        duration: 500,
+        zoom: initialZoom,
+      });
+    }
+  };
+
   // Create a base map on first render
   useEffect(() => {
     if (!mapRef.current) {
@@ -162,7 +228,7 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
       setMapError(`Map initialization failed: ${errorMessage}`);
       setDebugInfo(`Error: ${errorMessage}`);
     }
-  }, []);
+  }, [locations]);
 
   useEffect(() => {
     if (!map) return;
@@ -189,73 +255,7 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [map]);
-
-  const updateMapMarkers = (
-    mapInstance: Map,
-    locs: LocationMarker[],
-    centerIdx: number
-  ) => {
-    const vectorLayer = mapInstance
-      .getLayers()
-      .getArray()[2] as VectorLayer<VectorSource>;
-    const vectorSource = vectorLayer.getSource() as VectorSource;
-
-    vectorSource.clear();
-
-    if (locs.length === 0) {
-      setDebugInfo("No locations to display on map");
-      return;
-    }
-
-    setDebugInfo(`Updating ${locs.length} locations on map`);
-
-    const features = locs.map((location, index) => {
-      const feature = new Feature({
-        geometry: new Point(fromLonLat([location.long, location.lat])),
-        locationData: location,
-        id: index,
-      });
-
-      try {
-        feature.setStyle(
-          new Style({
-            image: new Icon({
-              src: "/assets/images/ldb_logo.png",
-              scale: 0.07,
-              anchor: [0.5, 1],
-              crossOrigin: "anonymous",
-            }),
-          })
-        );
-      } catch (e) {
-        console.log('e', e);
-        feature.setStyle(
-          new Style({
-            image: new Circle({
-              radius: 8,
-              fill: new Fill({ color: "#1980C7" }),
-              stroke: new Stroke({ color: "white", width: 2 }),
-            }),
-          })
-        );
-      }
-
-      return feature;
-    });
-
-    vectorSource.addFeatures(features);
-
-    if (locs.length > 0) {
-      const center = locs[centerIdx] || locs[0];
-
-      mapInstance.getView().animate({
-        center: fromLonLat([center.long, center.lat]),
-        duration: 500,
-        zoom: initialZoom,
-      });
-    }
-  };
+  }, [locations, map]);
 
   return (
     <div className="flex flex-col items-center w-full">
