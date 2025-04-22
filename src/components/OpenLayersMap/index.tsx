@@ -37,7 +37,8 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
   const mapElement = useRef<HTMLDivElement | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<Map | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<LocationMarker | null>(null);
+  const [selectedLocation, setSelectedLocation] =
+    useState<LocationMarker | null>(null);
   const [mapError, setMapError] = useState<string | null>(null);
   const [debugInfo, setDebugInfo] = useState<string>("");
 
@@ -47,97 +48,83 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
       setDebugInfo("Map container ref is null");
       return;
     }
-    
+
     try {
-      // Store a reference to the map container
       mapElement.current = mapRef.current;
       setDebugInfo("Map container found, initializing...");
-      
-      // Try multiple tile sources to increase chance of success
+
       const osmSource = new OSM({
-        url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        crossOrigin: 'anonymous',
-        attributions: []
+        url: "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        crossOrigin: "anonymous",
+        attributions: [],
       });
-      
-      // Fallback tile source
+
       const xyzSource = new XYZ({
-        url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-        crossOrigin: 'anonymous',
-        attributions: []
+        url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        crossOrigin: "anonymous",
+        attributions: [],
       });
-      
-      // Create main tile layer with primary source
-      const tileLayer = new TileLayer({ 
+
+      const tileLayer = new TileLayer({
         source: osmSource,
-        visible: true
+        visible: true,
       });
-      
-      // Create backup tile layer with fallback source
+
       const backupTileLayer = new TileLayer({
         source: xyzSource,
-        visible: false
+        visible: false,
       });
-      
-      // Initial view centered on first location or default
-      const initialCenter = locations.length > 0 
-        ? [locations[0].long, locations[0].lat] 
-        : [0, 0];
-      
-      // Create the map instance
+
+      const initialCenter =
+        locations.length > 0 ? [locations[0].long, locations[0].lat] : [0, 0];
+
       const initialMap = new Map({
         target: mapElement.current,
         layers: [tileLayer, backupTileLayer],
         view: new View({
           center: fromLonLat(initialCenter),
           zoom: initialZoom,
-          constrainResolution: true
+          constrainResolution: true,
         }),
-        controls: []
+        controls: [],
       });
-      
-      // Add vector layer for markers
+
       const vectorSource = new VectorSource();
       const vectorLayer = new VectorLayer({
         source: vectorSource,
-        zIndex: 10
+        zIndex: 10,
       });
       initialMap.addLayer(vectorLayer);
-      
-      // Create and add popup overlay
+
       if (popupRef.current) {
         const popup = new Overlay({
           element: popupRef.current,
           positioning: "bottom-center",
           stopEvent: false,
-          offset: [0, -10]
+          offset: [0, -10],
         });
         initialMap.addOverlay(popup);
       }
-      
-      // Add click handler
+
       initialMap.on("click", (evt) => {
-        const feature = initialMap.forEachFeatureAtPixel(
-          evt.pixel,
-          (feature) => feature
-        );
+        const feature = initialMap.forEachFeatureAtPixel(evt.pixel, (f) => f);
+        const popup = initialMap.getOverlays().getArray()[0];
 
         if (feature) {
           const locationData = feature.get("locationData") as LocationMarker;
           if (locationData) {
-            const coordinates = (feature.getGeometry() as Point).getCoordinates();
-            const popup = initialMap.getOverlays().getArray()[0];
+            const coordinates = (
+              feature.getGeometry() as Point
+            ).getCoordinates();
             popup.setPosition(coordinates);
             setSelectedLocation(locationData);
           }
         } else {
-          const popup = initialMap.getOverlays().getArray()[0];
           popup.setPosition(undefined);
           setSelectedLocation(null);
         }
       });
 
-      // Add hover handler
       initialMap.on("pointermove", (e) => {
         const hit = initialMap.hasFeatureAtPixel(e.pixel);
         if (initialMap.getViewport()) {
@@ -145,8 +132,7 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
         }
       });
 
-      // Handle primary tile source load failure
-      tileLayer.getSource()?.on('tileloaderror', () => {
+      tileLayer.getSource()?.on("tileloaderror", () => {
         setDebugInfo("Primary tile source failed, trying backup");
         tileLayer.setVisible(false);
         backupTileLayer.setVisible(true);
@@ -154,67 +140,67 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
 
       setMap(initialMap);
       setDebugInfo("Map initialized successfully");
-      
-      // Render markers if we have them
+
       if (locations.length > 0) {
         updateMapMarkers(initialMap, locations, centerOn);
       }
 
-      // Update the map size after a delay to handle any layout issues
       setTimeout(() => {
         initialMap.updateSize();
       }, 200);
-      
-      // Clean up on unmount
+
       return () => {
         setDebugInfo("Cleaning up map");
         if (initialMap) {
-          initialMap.setTarget('');
+          initialMap.setTarget("");
         }
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       console.error("Error initializing map:", error);
       setMapError(`Map initialization failed: ${errorMessage}`);
       setDebugInfo(`Error: ${errorMessage}`);
     }
-  }, []); // Empty dependency array - only run once on mount
+  }, []);
 
-  // Handle location updates separately
   useEffect(() => {
     if (!map) return;
-    
+
     try {
       updateMapMarkers(map, locations, centerOn);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       console.error("Error updating markers:", error);
       setMapError(`Failed to update markers: ${errorMessage}`);
     }
   }, [locations, centerOn]);
 
-  // Handle window resize
   useEffect(() => {
     if (!map) return;
-    
+
     const handleResize = () => {
       map.updateSize();
     };
-    
-    window.addEventListener('resize', handleResize);
-    
+
+    window.addEventListener("resize", handleResize);
+
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, [map]);
 
-  // Helper function to update markers
-  const updateMapMarkers = (mapInstance: Map, locs: LocationMarker[], centerIdx: number) => {
-    // Get vector layer
-    const vectorLayer = mapInstance.getLayers().getArray()[2] as VectorLayer<VectorSource>;
+  const updateMapMarkers = (
+    mapInstance: Map,
+    locs: LocationMarker[],
+    centerIdx: number
+  ) => {
+    const vectorLayer = mapInstance
+      .getLayers()
+      .getArray()[2] as VectorLayer<VectorSource>;
     const vectorSource = vectorLayer.getSource() as VectorSource;
 
-    // Clear existing features
     vectorSource.clear();
 
     if (locs.length === 0) {
@@ -224,7 +210,6 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
 
     setDebugInfo(`Updating ${locs.length} locations on map`);
 
-    // Create and add features for all locations
     const features = locs.map((location, index) => {
       const feature = new Feature({
         geometry: new Point(fromLonLat([location.long, location.lat])),
@@ -232,21 +217,19 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
         id: index,
       });
 
-      // Try to use the icon but fall back to a circle if there's an issue
       try {
         feature.setStyle(
           new Style({
             image: new Icon({
-              src: '/assets/images/ldb_logo.png',
+              src: "/assets/images/ldb_logo.png",
               scale: 0.07,
               anchor: [0.5, 1],
-              crossOrigin: 'anonymous'
+              crossOrigin: "anonymous",
             }),
           })
         );
       } catch (e) {
         console.log('e', e);
-        // Fallback to a simple circle marker
         feature.setStyle(
           new Style({
             image: new Circle({
@@ -263,26 +246,23 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
 
     vectorSource.addFeatures(features);
 
-    // Center the map if we have at least one location
     if (locs.length > 0) {
       const center = locs[centerIdx] || locs[0];
-      
-      // Use the view's fit method for better positioning
+
       mapInstance.getView().animate({
         center: fromLonLat([center.long, center.lat]),
         duration: 500,
-        zoom: initialZoom
+        zoom: initialZoom,
       });
     }
   };
 
   return (
     <div className="flex flex-col items-center w-full">
-      {/* Debug information - comment out in production */}
       <div className="bg-blue-50 p-2 w-full text-xs mb-2">
         Status: {debugInfo}
       </div>
-      
+
       <div className="relative w-full">
         {mapError && (
           <div className="absolute inset-0 flex items-center justify-center bg-red-50 z-20 p-4 text-red-600">
@@ -307,7 +287,6 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
           data-testid="map-container"
         />
 
-        {/* Popup overlay */}
         <div
           ref={popupRef}
           className="absolute"
