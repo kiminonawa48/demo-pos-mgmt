@@ -1,0 +1,9 @@
+{
+    "menu_dashboard": "Dashboard",
+    "menu_merchants_info": "Merchants Information",
+    "menu_merchant": "Merchant",
+    "menu_terminal": "Terminal",
+    "menu_pos": "POS",
+    "menu_users": "Users",
+    "menu_role_permission": "Role & Permission"
+}

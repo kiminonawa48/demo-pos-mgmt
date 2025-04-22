@@ -1,0 +1,24 @@
+.loading-container {
+    background: linear-gradient(-45deg, #0D47A1, #2196F3, #00BFFF, #E0F7FA);
+    background-size: 400% 400%;
+    animation: loading_container_gradient 10s ease infinite;
+    height: 100vh;
+    min-height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes loading_container_gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
