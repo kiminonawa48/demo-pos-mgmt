@@ -1,6 +1,0 @@
-{
-    "welcome": "Welcome to our application",
-    "description": "This is a multi-language React application",
-    "switchLanguage": "Switch Language",
-    "hello": "Hello, {{name}}!"
-}
