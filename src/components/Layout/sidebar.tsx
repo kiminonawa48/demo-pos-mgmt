@@ -3,6 +3,7 @@ import { Divider, Layout, Menu, Space, Typography } from "antd";
 import { useLocation, useNavigate } from "react-router";
 import SideBarMenuPosMgmt from "./SidebarMenu/PosMgmt";
 import { ISideBarMenu } from "./SidebarMenu/domain";
+import { useTranslation } from "react-i18next";
 
 const { Sider } = Layout;
 
@@ -21,6 +22,8 @@ const Sidebar = ({
   userInfo,
   portalTheme,
 }: ISidebar) => {
+  const { t } = useTranslation("sidebar_pos_mgmt");
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -83,7 +86,7 @@ const Sidebar = ({
           if (user_role.find((str) => str === sb.role) || sb.role === "") {
             if (sb.sub_menu === true) {
               return {
-                label: sb.title_name,
+                label: t(sb.title_name),
                 key: sb.path_name,
                 icon: sb.icon_name,
                 children: sb.children.map((sub) => {
@@ -95,7 +98,7 @@ const Sidebar = ({
                     sub.permissions.join(",") === ""
                   ) {
                     return {
-                      label: sub.sub_title_name,
+                      label: t(sub.sub_title_name),
                       key: sub.sub_path_name,
                       onClick: () => {
                         navigate(sub.sub_path_name);
@@ -111,7 +114,7 @@ const Sidebar = ({
                 label: (
                   <>
                     {sb.icon_name}
-                    <span>{sb.title_name}</span>
+                    <span>{t(sb.title_name)}</span>
                   </>
                 ),
                 key: sb.path_name,

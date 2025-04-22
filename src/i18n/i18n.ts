@@ -14,6 +14,9 @@ declare module "i18next" {
       dashboard: {
         [key: string]: string;
       };
+      sidebar_pos_mgmt: {
+        [key: string]: string;
+      };
       // You can add more namespaces as needed
     };
   }
@@ -25,7 +28,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: "eng",
-    ns: ["common", "dashboard"], // List all your namespaces here
+    ns: ["common", "dashboard", "sidebar_pos_mgmt"], // List all your namespaces here
     defaultNS: "common",
     debug: true,
     interpolation: {
