@@ -41,7 +41,7 @@ const RoutesComponent = () => {
           })}
 
           {/* without layout */}
-          <Route path={"/"} element={<HomepageContainer />} />
+          <Route path={"/"} element={<PrivateRoute><HomepageContainer /></PrivateRoute>} />
           <Route path={"/login"} element={<LoginConatiner />} />
 
           {/* Error pages */}
