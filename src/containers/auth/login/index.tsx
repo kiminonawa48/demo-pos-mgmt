@@ -1,24 +1,51 @@
-import {
-  Form,
-  Input,
-  Button,
-  Checkbox,
-  Row,
-  Col,
-  Typography,
-} from "antd";
+import { Form, Input, Button, Checkbox, Row, Col, Typography } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import "./css/index.css";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import useAuth from "@/routes/auth/useAuth";
 
 const { Title, Link } = Typography;
 
 const LoginConatiner = () => {
+  const { login } = useAuth();
+
   const navigate = useNavigate();
 
-  const onFinish = (values) => {
-    console.log("values", values);
-    navigate("/");
+  const [form] = Form.useForm(); // <-- Add form instance
+
+  const [inputValue, setInputValue] = useState({
+    username: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+
+  const onFinish = async (values: { username: string; password: string }) => {
+    setLoading(true);
+
+    try {
+      const response: any = await login(values.username, values.password); // <-- Add await
+
+      console.log('response', response);
+      if (response?.status === "00") {
+        navigate("/");
+      } else {
+        form.setFields([
+          {
+            name: "username",
+            errors: [response.message || "Login failed"],
+          },
+          {
+            name: "password",
+            errors: [response.message || "Login failed"],
+          },
+        ]);
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -45,6 +72,7 @@ const LoginConatiner = () => {
             </div>
 
             <Form
+              form={form}
               name="login"
               className="login-form"
               initialValues={{ remember: true }}
@@ -52,27 +80,31 @@ const LoginConatiner = () => {
               layout="vertical"
             >
               <Form.Item
-                label="Email"
-                name="email"
-                // rules={[
-                //   { required: true, message: "Please input your email!" },
-                //   { type: "email", message: "Please enter a valid email!" },
-                // ]}
+                label="Username"
+                name="username"
+                rules={[
+                  { required: true, message: "Please input your username!" },
+                ]}
               >
                 <Input
                   size="large"
-                  placeholder="admin@ldb.com"
-                  defaultValue="admin@ldb.com"
-                  value={"admin@ldb.com"}
+                  placeholder="Enter your username"
+                  value={inputValue.username}
+                  onChange={(e) =>
+                    setInputValue({
+                      ...inputValue,
+                      username: e.target.value,
+                    })
+                  }
                 />
               </Form.Item>
 
               <Form.Item
                 label="Password"
                 name="password"
-                // rules={[
-                //   { required: true, message: "Please input your password!" },
-                // ]}
+                rules={[
+                  { required: true, message: "Please input your password!" },
+                ]}
               >
                 <Input.Password
                   size="large"
@@ -80,8 +112,13 @@ const LoginConatiner = () => {
                   iconRender={(visible) =>
                     visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                   }
-                  defaultValue="1234"
-                  value={"1234"}
+                  value={inputValue.password}
+                  onChange={(e) =>
+                    setInputValue({
+                      ...inputValue,
+                      password: e.target.value,
+                    })
+                  }
                 />
               </Form.Item>
 
@@ -95,7 +132,13 @@ const LoginConatiner = () => {
               </div>
 
               <Form.Item>
-                <Button type="primary" htmlType="submit" size="large" block>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  size="large"
+                  block
+                  disabled={loading}
+                >
                   Login
                 </Button>
               </Form.Item>

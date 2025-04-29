@@ -3,8 +3,8 @@ import { IAuthContext } from "./type";
 
 const defaultAuthContext = {
   currentUser: null,
-  login: (email: string, password: string) => {
-    console.log(email, password);
+  login: (username: string, password: string) => {
+    console.log(username, password);
   },
   logout: () => {},
   userInfo: {},

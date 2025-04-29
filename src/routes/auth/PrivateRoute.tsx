@@ -1,20 +1,23 @@
-import React from 'react';
-import useAuth from './useAuth';
+import React from "react";
+// import useAuth from "./useAuth";
 
 export interface IPrivateRoute {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 const PrivateRoute = ({ children }: IPrivateRoute) => {
-    const { currentUser } = useAuth();
+//   const { currentUser } = useAuth();
 
-    if (currentUser) {
-        return <>{children}</>;
-    } else {
-        window.location.href = '/login';
+  const mockUser = localStorage.getItem("authenticationToken");
 
-        return <></>;
-    }
+  if (mockUser) {
+    // if (currentUser.username) {
+    return <>{children}</>;
+  } else {
+    window.location.href = "/login";
+
+    return <></>;
+  }
 };
 
 export default PrivateRoute;
