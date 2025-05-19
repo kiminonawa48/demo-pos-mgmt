@@ -3,11 +3,12 @@ import TagStatus from "@/components/TagStatus";
 import { Modal, Space, Table, TableProps } from "antd";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { routeNamePosMgmt } from "@/routes/pos-mgmt-route/route-name";
 
 const { confirm } = Modal;
 
 interface DataType {
-  key: string;
+  id: string;
   role_name: string;
   person: number;
   name: string;
@@ -59,17 +60,27 @@ const RoleAndPermissionList = () => {
     },
     {
       title: "Action",
-      key: "action",
-      render: () => (
+      key: "id",
+      render: (data) => (
         <Space size="middle">
           <ButtonAction
             enableView
-            onViewClick={() => {
-              navigate("/admin/pos-mgmt/role-permission/1/update?mode=VIEW");
-            }}
             enableEdit
+            onViewClick={() => {
+              const url =
+                routeNamePosMgmt.role_permission_update.replace(
+                  ":id",
+                  data.id
+                ) + "?mode=VIEW";
+              navigate(url);
+            }}
             onEditClick={() => {
-              navigate("/admin/pos-mgmt/role-permission/1/update?mode=Update");
+              const url =
+                routeNamePosMgmt.role_permission_update.replace(
+                  ":id",
+                  data.id
+                ) + "?mode=UPDATE";
+              navigate(url);
             }}
             enableDelete
             onDeleteClick={() => {
@@ -83,14 +94,14 @@ const RoleAndPermissionList = () => {
 
   const data: DataType[] = [
     {
-      key: "1",
+      id: "1",
       role_name: "SuperAdmin",
       person: 1,
       name: "User 1",
       status: "active",
     },
     {
-      key: "2",
+      id: "2",
       role_name: "Employee",
       person: 20,
       name: "User 2",

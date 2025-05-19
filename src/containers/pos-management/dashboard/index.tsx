@@ -10,7 +10,7 @@ import { api } from "@/utils/fetchHelper";
 const DashboardContainer = () => {
   const [locations, setLocations] = useState<ILocationMarker[]>([]);
   const [data, setData] = useState<any>(null);
-  console.log('data', data);
+  console.log("data", data);
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
@@ -62,29 +62,23 @@ const DashboardContainer = () => {
 
   return (
     <Spin spinning={loading}>
-      <div
-        style={{
-          padding: "24px",
-        }}
-      >
-        <Row gutter={[16, 16]}>
-          <Col className="gutter-row" span={24} lg={24} md={24} sm={24} xs={24}>
-            <InfoSummary data={statisticsData} />
-          </Col>
+      <Row gutter={[16, 16]}>
+        <Col className="gutter-row" span={24} lg={24} md={24} sm={24} xs={24}>
+          <InfoSummary data={statisticsData} />
+        </Col>
 
-          <Col className="gutter-row" span={24} lg={24} md={24} sm={24} xs={24}>
-            {locations.length > 0 && <MapSummary locations={locations} />}
-          </Col>
+        <Col className="gutter-row" span={24} lg={24} md={24} sm={24} xs={24}>
+          {locations.length > 0 && <MapSummary locations={locations} />}
+        </Col>
 
-          <Col className="gutter-row" span={16} lg={16} md={16} sm={24} xs={24}>
-            <TransactionChart />
-          </Col>
+        <Col className="gutter-row" span={16} lg={16} md={16} sm={24} xs={24}>
+          <TransactionChart />
+        </Col>
 
-          <Col className="gutter-row" span={8} lg={8} md={8} sm={24} xs={24}>
-            <RankingTransaction />
-          </Col>
-        </Row>
-      </div>
+        <Col className="gutter-row" span={8} lg={8} md={8} sm={24} xs={24}>
+          <RankingTransaction />
+        </Col>
+      </Row>
     </Spin>
   );
 };

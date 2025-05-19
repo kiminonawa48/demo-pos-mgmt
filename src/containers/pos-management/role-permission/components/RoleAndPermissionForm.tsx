@@ -277,25 +277,26 @@ const RoleAndPermissionForm = ({
             <div className="mb-3">
               <Row align="middle" justify="space-between">
                 <Col span={8}>
-                  <Typography.Text strong style={{ fontSize: 16 }}>
-                    {group.id}. {group.name}
-                  </Typography.Text>
-                </Col>
-                <Col span={16} style={{ textAlign: "right" }}>
                   <Checkbox
                     onChange={(e) =>
                       handleGroupPermissionChange(group.id, e.target.checked)
                     }
                     checked={isGroupFullySelected(group.id)}
                     indeterminate={isGroupPartiallySelected(group.id)}
-                  >
-                    Select All
-                  </Checkbox>
+                    style={{
+                      marginRight: "8px",
+                    }}
+                  />
+
+                  <Typography.Text strong style={{ fontSize: 16 }}>
+                    {group.id}. {group.name}
+                  </Typography.Text>
                 </Col>
               </Row>
             </div>
 
             <br />
+
             <div className="ml-8">
               <Row gutter={[16, 16]}>
                 {group.permissions.map((permission) => (

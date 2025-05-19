@@ -68,7 +68,7 @@ const Sidebar = ({
         </div>
         <div>
           <Text strong style={{ fontSize: 14 }}>
-            Lao Development Bank
+            Smart POS Management
           </Text>
         </div>
       </Space>

@@ -17,7 +17,7 @@ const RoutesComponent = () => {
               <RouteWrapper
                 useLayout={r.useLayout !== false}
                 title={r.title || "Page"}
-                breadcumb={r.breadcumb || ""}
+                breadcumbs={r.breadcumbs || []}
               >
                 {r.component ?? <></>}
               </RouteWrapper>

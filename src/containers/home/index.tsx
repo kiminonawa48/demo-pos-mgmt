@@ -12,6 +12,7 @@ import {
 import { ArrowRightOutlined } from "@ant-design/icons";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+import { routeNamePosMgmt } from "@/routes/pos-mgmt-route/route-name";
 
 const { Title } = Typography;
 
@@ -45,7 +46,7 @@ const HomepageContainer = () => {
 
   const folderOptions = [
     {
-      path: "/admin/pos-mgmt/dashboard",
+      path: routeNamePosMgmt.dashboard,
       title: "POS Management",
       image: "/assets/images/ldb_logo.png",
     },

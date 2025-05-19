@@ -4,14 +4,14 @@ interface RouteWrapperProps {
   children: React.ReactNode;
   useLayout?: boolean;
   title?: string;
-  breadcumb?: string;
+  breadcumbs?: any[];
 }
 
 const RouteWrapper = ({
   children,
   useLayout = true,
   title = "Page",
-  breadcumb = "Home",
+  breadcumbs,
 }: RouteWrapperProps) => {
   
   if (!useLayout) {
@@ -21,7 +21,7 @@ const RouteWrapper = ({
   return (
     <MainLayout 
       title={title}
-      breadcumb={breadcumb}
+      breadcumbs={breadcumbs ?? []}
     >
       {children}
     </MainLayout>

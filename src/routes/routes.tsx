@@ -6,7 +6,7 @@ export interface IRoutesList {
   route_type: "private_route" | "public_route";
   useLayout?: boolean;
   title?: string;
-  breadcumb?: string;
+  breadcumbs?: any[];
 }
 
 const routes: IRoutesList[] = [

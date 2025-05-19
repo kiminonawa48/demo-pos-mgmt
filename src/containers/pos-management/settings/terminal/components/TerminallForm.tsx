@@ -1,6 +1,6 @@
 import { Form, Input, Select, Switch, Button, Space } from "antd";
 
-const POSForm = ({
+const TerminalForm = ({
   form,
   onFinish,
   merchantOptions,
@@ -78,4 +78,4 @@ const POSForm = ({
   );
 };
 
-export default POSForm;
+export default TerminalForm;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TerminalList from "./components/TerminalList";
 import { Button, Card, Drawer, Form } from "antd";
-import POSForm from "./components/TerminallForm";
+import TerminalForm from "./components/TerminallForm";
 import { SaveOutlined } from "@ant-design/icons";
 interface InputDataType {
   id: number;
@@ -60,7 +60,7 @@ const TerminalSettingContainer = () => {
         onClose={onClose}
         open={open}
       >
-        <POSForm
+        <TerminalForm
           onFinish={onFinish}
           merchantOptions={merchantOptions}
           form={form}

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import UserList from "./components/MerchantList";
+import UserList from "../components/MerchantList";
 import { Button, Card, Drawer, Form } from "antd";
-import MerchantForm from "./components/MerchantForm";
+import MerchantForm from "../components/MerchantForm";
 import { SaveOutlined } from "@ant-design/icons";
 interface InputDataType {
   id?: number;
@@ -21,6 +21,7 @@ const MerchantSettingContainer = () => {
   const showDrawer = () => {
     setOpen(true);
   };
+  
   const onClose = () => {
     setOpen(false);
   };

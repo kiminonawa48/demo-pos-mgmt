@@ -16,12 +16,12 @@ const { Footer } = Layout;
 export interface IMainLayout {
   children: React.ReactNode;
   title: string;
-  breadcumb: string;
+  breadcumbs: any[];
 }
 
 const MainLayout = ({
   title,
-  breadcumb,
+  breadcumbs,
   children,
 }: IMainLayout) => {
   const { userInfo } = useAuth();
@@ -81,7 +81,7 @@ const MainLayout = ({
             />
 
             <ContentLayout
-              breadcumb={breadcumb}
+              breadcumbs={breadcumbs ?? []}
             >
               {children}
             </ContentLayout>
